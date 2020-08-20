@@ -4,6 +4,7 @@ local gmark_edit = "server"
 local gmark_go = "interact"
 local tp_priv = "teleport"
 pos_marker = {}
+-- minetest.registered_chatcommands
 -- ObjectRef:set_pos(pos)
 
 pos_marker.set = function(user, name, pos)
@@ -72,6 +73,7 @@ minetest.register_chatcommand("marker",{
 		end
 	end,
 })
+minetest.register_chatcommand("marks",minetest.registered_chatcommands.marker)
 
 minetest.register_chatcommand("gmarker",{
 	description = "Config Global Markers",
