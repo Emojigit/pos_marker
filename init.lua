@@ -44,8 +44,23 @@ minetest.register_chatcommand("marker",{
 		end
 		if subcommand == "set" then
 			if minetest.check_player_privs(name, mark_priv) then
+				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
+				if markers[markName] then
+					return false, "Can't set marker: Use `override` subcommand to override."
+				end
 				pos_marker.set(name,markName,pos)
 				return true, "Setted!"
+			else
+				return false, "No priv to do this!"
+			end
+		elseif subcommand == "override" then
+			if minetest.check_player_privs(name, mark_priv) then
+				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
+				if not(markers[markName]) then
+					return false, "Can't override marker: Use `set` subcommand to add a marker."
+				end
+				pos_marker.set(name,markName,pos)
+				return true, "Overrided!"
 			else
 				return false, "No priv to do this!"
 			end
@@ -90,8 +105,23 @@ minetest.register_chatcommand("gmarker",{
 		end
 		if subcommand == "set" then
 			if minetest.check_player_privs(name, gmark_edit) then
+				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
+				if markers[markName] then
+					return false, "Can't set marker: Use `override` subcommand to override."
+				end
 				pos_marker.set("\\SERVER\\",markName,pos)
 				return true, "Setted!"
+			else
+				return false, "No priv to do this!"
+			end
+		elseif subcommand == "override" then
+			if minetest.check_player_privs(name, mark_priv) then
+				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
+				if not(markers[markName]) then
+					return false, "Can't override marker: Use `set` subcommand to add a marker."
+				end
+				pos_marker.set("\\SERVER\\",markName,pos)
+				return true, "Overrided!"
 			else
 				return false, "No priv to do this!"
 			end
@@ -121,5 +151,7 @@ minetest.register_chatcommand("gmarker",{
 		end
 	end,
 })
+
+minetest.register_chatcommand("gmarks",minetest.registered_chatcommands.gmarker)
 
 
