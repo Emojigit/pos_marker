@@ -31,7 +31,7 @@ end
 
 minetest.register_chatcommand("marker",{
 	description = "Config Markers",
-	params = "<get/set/tp> <marker name>",
+	params = "<get/set/override/tp> <marker name>",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if not(player) then
@@ -45,7 +45,7 @@ minetest.register_chatcommand("marker",{
 		if subcommand == "set" then
 			if minetest.check_player_privs(name, mark_priv) then
 				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
-				if markers[markName] then
+				if markers and markers[markName] then
 					return false, "Can't set marker: Use `override` subcommand to override."
 				end
 				pos_marker.set(name,markName,pos)
@@ -56,7 +56,7 @@ minetest.register_chatcommand("marker",{
 		elseif subcommand == "override" then
 			if minetest.check_player_privs(name, mark_priv) then
 				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
-				if not(markers[markName]) then
+				if not(markers and markers[markName]) then
 					return false, "Can't override marker: Use `set` subcommand to add a marker."
 				end
 				pos_marker.set(name,markName,pos)
