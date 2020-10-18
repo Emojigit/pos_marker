@@ -30,8 +30,8 @@ pos_marker.get = function(user, name)
 end
 
 
-subcommands.register_command_with_subcommand("gmarker",{
-	description = "Test of subcommands",
+subcommands.register_command_with_subcommand("marker",{
+	description = "Control Markers",
 	_sc_def = {
 		set = {
 			description = "Set a marker",
@@ -102,8 +102,8 @@ subcommands.register_command_with_subcommand("gmarker",{
 })
 
 
-subcommands.register_command_with_subcommand("marker",{
-	description = "Test of subcommands",
+subcommands.register_command_with_subcommand("gmarker",{
+	description = "Control Global Markers",
 	_sc_def = {
 		set = {
 			description = "Set a marker",
