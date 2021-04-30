@@ -48,7 +48,7 @@ subcommands.register_command_with_subcommand("marker",{
 					return false, "Can't set marker: Use `override` subcommand to override."
 				end
 				pos_marker.set(name,param,pos)
-				return true, "Setted!"
+				return true, "Marker set!"
 			end
 		},
 		override = {
@@ -120,7 +120,7 @@ subcommands.register_command_with_subcommand("gmarker",{
 					return false, "Can't set marker: Use `override` subcommand to override."
 				end
 				pos_marker.set("\\SERVER\\",param,pos)
-				return true, "Setted!"
+				return true, "Marker set!"
 			end
 		},
 		override = {
