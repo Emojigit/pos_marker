@@ -190,7 +190,7 @@ subcommands.register_command_with_subcommand("gmarker",{
 			privs = gmark_edit,
 			params = "<marker name>",
 			func = function(name,param)
-				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
+				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
 				if not(markers and markers[param]) then
 					return false, "Can't override marker: Marker not exist!"
 				end
