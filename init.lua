@@ -107,7 +107,7 @@ subcommands.register_command_with_subcommand("marker",{
 					return false, "No markers!"
 				end
 				for k,v in pairs(markers) do
-					RSTR = RSTR .. k .. minetest.pos_to_string(mpos) .. "\n"
+					RSTR = RSTR .. k .. minetest.pos_to_string(v) .. "\n"
 				end
 				RSTR = RSTR .. "-".."- Marker List End, Total "..tostring(tl(markers)).." Markers -".."-"
 				return true, RSTR
@@ -209,7 +209,7 @@ subcommands.register_command_with_subcommand("gmarker",{
 					return false, "No markers!"
 				end
 				for k,v in pairs(markers) do
-					RSTR = RSTR .. k .. minetest.pos_to_string(mpos) .. "\n"
+					RSTR = RSTR .. k .. minetest.pos_to_string(v) .. "\n"
 				end
 				RSTR = RSTR .. "-".."- Marker List End, Total "..tostring(tl(markers)).." Markers -".."-"
 				return true, RSTR
