@@ -4,8 +4,13 @@ local gmark_edit = {server=true}
 local gmark_go = {interact=true}
 local tp_priv = {teleport=true}
 pos_marker = {}
--- minetest.registered_chatcommands
--- ObjectRef:set_pos(pos)
+local function tl(t)
+	local c = 0
+	for k,v in pairs(t) do
+		c = c + 1
+	end
+	return c
+end
 
 pos_marker.set = function(user, name, pos)
 	local markers = minetest.deserialize(mod_storage:get_string(tostring(user)))
@@ -13,6 +18,15 @@ pos_marker.set = function(user, name, pos)
 		markers = {}
 	end
 	markers[tostring(name)] = vector.round(pos)
+	mod_storage:set_string(tostring(user), minetest.serialize(markers))
+end
+
+pos_marker.del = function(user, name)
+	local markers = minetest.deserialize(mod_storage:get_string(tostring(user)))
+	if markers == nil then
+		markers = {}
+	end
+	markers[tostring(name)] = nil
 	mod_storage:set_string(tostring(user), minetest.serialize(markers))
 end
 
@@ -35,7 +49,7 @@ subcommands.register_command_with_subcommand("marker",{
 	_sc_def = {
 		set = {
 			description = "Set a marker",
-			privs = gmark_edit,
+			privs = mark_priv,
 			params = "<marker name>",
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
@@ -52,8 +66,8 @@ subcommands.register_command_with_subcommand("marker",{
 			end
 		},
 		override = {
-			description = "Override a command",
-			privs = gmark_edit,
+			description = "Override a marker",
+			privs = mark_priv,
 			params = "<marker name>",
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
@@ -68,6 +82,36 @@ subcommands.register_command_with_subcommand("marker",{
 				pos_marker.set(name,param,pos)
 				return true, "Overrided!"
 			end
+		},
+		delete = {
+			description = "Delete a marker",
+			privs = mark_priv,
+			params = "<marker name>",
+			func = function(name,param)
+				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
+				if not(markers and markers[param]) then
+					return false, "Can't delete marker: Marker not exist!"
+				end
+				pos_marker.del(name,param)
+				return true, "Deleted!"
+			end
+		},
+		list = {
+			description = "List all markers",
+			privs = mark_priv,
+			params = "",
+			func = function(name,param)
+				local RSTR = "-".."- Marker List Start -".."-\n"
+				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
+				if not markers then
+					return false, "No markers!"
+				end
+				for k,v in pairs(markers) do
+					RSTR = RSTR .. k .. minetest.pos_to_string(mpos) .. "\n"
+				end
+				RSTR = RSTR .. "-".."- Marker List End, Total "..tostring(tl(markers)).." Markers -".."-"
+				return true, RSTR
+			end,
 		},
 		get = {
 			description = "Get a marker's pos",
@@ -84,7 +128,7 @@ subcommands.register_command_with_subcommand("marker",{
 		tp = {
 			description = "Teleport to a marker",
 			params = "<marker name>",
-			privs = gmark_go,
+			privs = tp_priv,
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
@@ -107,7 +151,7 @@ subcommands.register_command_with_subcommand("gmarker",{
 	_sc_def = {
 		set = {
 			description = "Set a marker",
-			privs = mark_priv,
+			privs = gmark_edit,
 			params = "<marker name>",
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
@@ -124,8 +168,8 @@ subcommands.register_command_with_subcommand("gmarker",{
 			end
 		},
 		override = {
-			description = "Override a command",
-			privs = mark_priv,
+			description = "Override a marker",
+			privs = gmark_edit,
 			params = "<marker name>",
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
@@ -140,6 +184,36 @@ subcommands.register_command_with_subcommand("gmarker",{
 				pos_marker.set("\\SERVER\\",param,pos)
 				return true, "Overrided!"
 			end
+		},
+		delete = {
+			description = "Delete a marker",
+			privs = gmark_edit,
+			params = "<marker name>",
+			func = function(name,param)
+				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
+				if not(markers and markers[param]) then
+					return false, "Can't override marker: Marker not exist!"
+				end
+				pos_marker.del("\\SERVER\\",param)
+				return true, "Deleted!"
+			end
+		},
+		list = {
+			description = "List all markers",
+			privs = mark_priv,
+			params = "",
+			func = function(name,param)
+				local RSTR = "-".."- Marker List Start -".."-\n"
+				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
+				if not markers then
+					return false, "No markers!"
+				end
+				for k,v in pairs(markers) do
+					RSTR = RSTR .. k .. minetest.pos_to_string(mpos) .. "\n"
+				end
+				RSTR = RSTR .. "-".."- Marker List End, Total "..tostring(tl(markers)).." Markers -".."-"
+				return true, RSTR
+			end,
 		},
 		get = {
 			description = "Get a marker's pos",
@@ -156,7 +230,7 @@ subcommands.register_command_with_subcommand("gmarker",{
 		tp = {
 			description = "Teleport to a marker",
 			params = "<marker name>",
-			privs = tp_priv,
+			privs = gmark_go,
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
