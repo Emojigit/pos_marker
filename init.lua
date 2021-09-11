@@ -3,6 +3,7 @@ local mark_priv = {interact=true}
 local gmark_edit = {server=true}
 local gmark_go = {interact=true}
 local tp_priv = {teleport=true}
+local S = minetest.get_translator(minetest.get_current_modname())
 pos_marker = {}
 local function tl(t)
 	local c = 0
@@ -45,101 +46,101 @@ end
 
 
 subcommands.register_command_with_subcommand("marker",{
-	description = "Control Markers",
+	description = S("Control Markers"),
 	_sc_def = {
 		set = {
-			description = "Set a marker",
+			description = S("Set a marker"),
 			privs = mark_priv,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
-					return false, "Not a player!"
+					return false, S("Player not online!")
 				end
 				local pos = player:get_pos()
 				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
 				if markers and markers[param] then
-					return false, "Can't set marker: Use `override` subcommand to override."
+					return false, S("Can't set marker: Use `override` subcommand to override.")
 				end
 				pos_marker.set(name,param,pos)
-				return true, "Marker set!"
+				return true, S("Marker set!")
 			end
 		},
 		override = {
-			description = "Override a marker",
+			description = S("Override a marker"),
 			privs = mark_priv,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
-					return false, "Not a player!"
+					return false, S("Player not online!")
 				end
 				local pos = player:get_pos()
 				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
 				if not(markers and markers[param]) then
-					return false, "Can't override marker: Use `set` subcommand to add a marker."
+					return false, S("Can't override marker: Use `set` subcommand to add a marker.")
 				end
 				pos_marker.set(name,param,pos)
-				return true, "Overrided!"
+				return true, S("Marker overrided!")
 			end
 		},
 		delete = {
-			description = "Delete a marker",
+			description = S("Delete a marker"),
 			privs = mark_priv,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
 				if not(markers and markers[param]) then
-					return false, "Can't delete marker: Marker not exist!"
+					return false, S("Can't delete marker: Marker not exist!")
 				end
 				pos_marker.del(name,param)
-				return true, "Deleted!"
+				return true, S("Deleted!")
 			end
 		},
 		list = {
-			description = "List all markers",
+			description = S("List all markers"),
 			privs = mark_priv,
 			params = "",
 			func = function(name,param)
-				local RSTR = "-".."- Marker List Start -".."-\n"
+				local RSTR = "-".."- " .. S("Marker List Start") .. " -".."-\n"
 				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
 				if not markers then
-					return false, "No markers!"
+					return false, S("No markers!")
 				end
 				for k,v in pairs(markers) do
 					RSTR = RSTR .. k .. minetest.pos_to_string(v) .. "\n"
 				end
-				RSTR = RSTR .. "-".."- Marker List End, Total "..tostring(tl(markers)).." Markers -".."-"
+				RSTR = RSTR .. "-".."- " .. S("Marker List End, Total @1 Markers",tostring(tl(markers))) .. " -".."-"
 				return true, RSTR
 			end,
 		},
 		get = {
-			description = "Get a marker's pos",
+			description = S("Get a marker's pos"),
 			privs = mark_priv,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local mpos = pos_marker.get(name,param)
 				if mpos then
-					return true, "The marker "..param.." is at "..minetest.pos_to_string(mpos)
+					return true, S("The marker @1 is at @2",param,minetest.pos_to_string(mpos))
 				end
-				return false, "No this marker!"
+				return false, S("No this marker!")
 			end
 		},
 		tp = {
-			description = "Teleport to a marker",
-			params = "<marker name>",
+			description = S("Teleport to a marker"),
+			params = S("<marker name>"),
 			privs = tp_priv,
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
-					return false, "Not a player!"
+					return false, S("Player not online!")
 				end
 				local mpos = pos_marker.get(name,param)
 				if mpos then
 					player:set_pos(mpos)
-					return true, "The marker "..param.." is at "..minetest.pos_to_string(mpos)
+					return true, S("The marker @1 is at @2",param,minetest.pos_to_string(mpos))
 				end
-				return false, "No this marker!"
+				return false, S("No this marker!")
 			end
 		},
 	},
@@ -147,101 +148,101 @@ subcommands.register_command_with_subcommand("marker",{
 
 
 subcommands.register_command_with_subcommand("gmarker",{
-	description = "Control Global Markers",
+	description = S("Control Global Markers"),
 	_sc_def = {
 		set = {
-			description = "Set a marker",
+			description = S("Set a marker"),
 			privs = gmark_edit,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
-					return false, "Not a player!"
+					return false, S("Player not online!")
 				end
 				local pos = player:get_pos()
 				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
 				if markers and markers[param] then
-					return false, "Can't set marker: Use `override` subcommand to override."
+					return false, S("Can't set marker: Use `override` subcommand to override.")
 				end
 				pos_marker.set("\\SERVER\\",param,pos)
-				return true, "Marker set!"
+				return true, S("Marker set!")
 			end
 		},
 		override = {
-			description = "Override a marker",
+			description = S("Override a marker"),
 			privs = gmark_edit,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
-					return false, "Not a player!"
+					return false, S("Player not online!")
 				end
 				local pos = player:get_pos()
 				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
 				if not(markers and markers[param]) then
-					return false, "Can't override marker: Use `set` subcommand to add a marker."
+					return false, S("Can't override marker: Use `set` subcommand to add a marker.")
 				end
 				pos_marker.set("\\SERVER\\",param,pos)
 				return true, "Overrided!"
 			end
 		},
 		delete = {
-			description = "Delete a marker",
+			description = S("Delete a marker"),
 			privs = gmark_edit,
 			params = "<marker name>",
 			func = function(name,param)
 				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
 				if not(markers and markers[param]) then
-					return false, "Can't override marker: Marker not exist!"
+					return false, S("Can't override marker: Marker not exist!")
 				end
 				pos_marker.del("\\SERVER\\",param)
-				return true, "Deleted!"
+				return true, S("Deleted!")
 			end
 		},
 		list = {
-			description = "List all markers",
+			description = S("List all markers"),
 			privs = mark_priv,
 			params = "",
 			func = function(name,param)
-				local RSTR = "-".."- Marker List Start -".."-\n"
+				local RSTR = "-".."- " .. S("Global Marker List Start") .. " -".."-\n"
 				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
 				if not markers then
-					return false, "No markers!"
+					return false, S("No markers!")
 				end
 				for k,v in pairs(markers) do
 					RSTR = RSTR .. k .. minetest.pos_to_string(v) .. "\n"
 				end
-				RSTR = RSTR .. "-".."- Marker List End, Total "..tostring(tl(markers)).." Markers -".."-"
+				RSTR = RSTR .. "-".."- " .. S("Global Marker List End, Total @1 Markers",tostring(tl(markers))) .. " -".."-"
 				return true, RSTR
 			end,
 		},
 		get = {
-			description = "Get a marker's pos",
+			description = S("Get a marker's pos"),
 			privs = mark_priv,
-			params = "<marker name>",
+			params = S("<marker name>"),
 			func = function(name,param)
 				local mpos = pos_marker.get("\\SERVER\\",param)
 				if mpos then
-					return true, "The marker "..param.." is at "..minetest.pos_to_string(mpos)
+					return true, S("The marker @1 is at @2",param,minetest.pos_to_string(mpos))
 				end
-				return false, "No this marker!"
+				return false, S("No this marker!")
 			end
 		},
 		tp = {
-			description = "Teleport to a marker",
-			params = "<marker name>",
+			description = S("Teleport to a marker"),
+			params = S("<marker name>"),
 			privs = gmark_go,
 			func = function(name,param)
 				local player = minetest.get_player_by_name(name)
 				if not(player) then
-					return false, "Not a player!"
+					return false, S("Player not online!")
 				end
 				local mpos = pos_marker.get("\\SERVER\\",param)
 				if mpos then
 					player:set_pos(mpos)
-					return true, "The marker "..param.." is at "..minetest.pos_to_string(mpos)
+					return true, S("The marker @1 is at @2",param,minetest.pos_to_string(mpos))
 				end
-				return false, "No this marker!"
+				return false, S("No this marker!")
 			end
 		},
 	},

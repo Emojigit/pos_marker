@@ -1,0 +1,25 @@
+# textdomain: pos_marker
+Control Markers=
+Set a marker=
+<marker name>=
+Player not online!=
+Can't set marker: Use `override` subcommand to override.=
+Marker set!=
+Override a marker=
+Can't override marker: Use `set` subcommand to add a marker.=
+Marker overrided!=
+Delete a marker=
+Can't delete marker: Marker not exist!=
+Deleted!=
+List all markers=
+Marker List Start=
+No markers!=
+Marker List End, Total @1 Markers=
+Get a marker's pos=
+The marker @1 is at @2=
+No this marker!=
+Teleport to a marker=
+Control Global Markers=
+Can't override marker: Marker not exist!=
+Global Marker List Start=
+Global Marker List End, Total @1 Markers=
