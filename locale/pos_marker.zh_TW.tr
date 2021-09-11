@@ -1,0 +1,25 @@
+# textdomain: pos_marker
+Control Markers=管理標記
+Set a marker=加入標記
+<marker name>=<標記名稱>
+Player not online!=玩家不在線！
+Can't set marker: Use `override` subcommand to override.=無法設定標記：使用`override`子指令以覆蓋現有標記。
+Marker set!=已設定標記！
+Override a marker=覆蓋現有標記
+Can't override marker: Use `set` subcommand to add a marker.=無法覆蓋標記：使用`override`子指令以設定新標記。
+Marker overrided!=已覆蓋標記！
+Delete a marker=移除標記
+Can't delete marker: Marker not exist!=無法移除標記：標記不存在！
+Deleted!=已移除！
+List all markers=列出所有標記
+Marker List Start=標記列表開始
+No markers!=沒有標記！
+Marker List End, Total @1 Markers=標記列表結束，共@1個標記
+Get a marker's pos=獲得標記的坐標
+The marker @1 is at @2=標記@1在@2
+No this marker!=標記不存在！
+Teleport to a marker=傳送至標記
+Control Global Markers=管理全域標記
+Can't override marker: Marker not exist!=無法覆蓋標記：標記不存在！
+Global Marker List Start=全域標記列表開始
+Global Marker List End, Total @1 Markers=全域標記列表結束，共@1個全域標記

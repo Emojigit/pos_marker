@@ -103,7 +103,7 @@ subcommands.register_command_with_subcommand("marker",{
 			params = "",
 			func = function(name,param)
 				local RSTR = "-".."- " .. S("Marker List Start") .. " -".."-\n"
-				local markers = minetest.deserialize(mod_storage:get_string(tostring("\\SERVER\\")))
+				local markers = minetest.deserialize(mod_storage:get_string(tostring(name)))
 				if not markers then
 					return false, S("No markers!")
 				end
